@@ -11,7 +11,7 @@ function uploadFile(file) {
 
     if(window.XMLHttpRequest)       xhr = new XMLHttpRequest();
     else if(window.ActiveXObject)   xhr = new ActiveXObject("Microsoft.XMLHTTP");
-    var sliceMethod = data.slice ? 'slice' : (data.webkitSlice ? 'webkitSlice' : (data.mozSlice ? 'mozSlice' : false));
+    var sliceMethod = file.slice ? 'slice' : (file.webkitSlice ? 'webkitSlice' : (file.mozSlice ? 'mozSlice' : false));
 
 
 
