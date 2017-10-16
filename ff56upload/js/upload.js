@@ -7,9 +7,12 @@ function uploadFile(file) {
 
     var url = '/';
     var xhr;
+    var chunkSize = 1024 * 1024 * 2;
 
     if(window.XMLHttpRequest)       xhr = new XMLHttpRequest();
     else if(window.ActiveXObject)   xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    var sliceMethod = data.slice ? 'slice' : (data.webkitSlice ? 'webkitSlice' : (data.mozSlice ? 'mozSlice' : false));
+
 
 
     xhr.open("POST", url, true);
@@ -33,7 +36,8 @@ function uploadFile(file) {
         console.log('xhr progress: ' + (Math.floor(done/total*1000)/10) + '%');
     }, false);
 
-    xhr.send(file);
+    // send first chunk of chunksize
+    xhr.send(file[sliceMethod](chunkSize));
 }
 
 var uploadfiles = document.querySelector('#uploads');
