@@ -1,32 +1,44 @@
 function uploadFile(file) {
+    // add time loggers
+    console.time('load');
+    console.time('error');
+    console.time('abort');
+    console.time('upload');
+
     var url = '/';
-    var xhr = new XMLHttpRequest();
-    var formData = new FormData();
+    var xhr;
+
+    if(window.XMLHttpRequest)       xhr = new XMLHttpRequest();
+    else if(window.ActiveXObject)   xhr = new ActiveXObject("Microsoft.XMLHTTP");
+
+
     xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type","multipart/form-data");
+    //xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    xhr.setRequestHeader("X_FILENAME", encodeURIComponent(file.name));
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // handle response
-            console.log(xhr.readyState, xhr.status, xhr.responseText);
+            console.log('request completed successful', xhr.readyState, xhr.status, xhr.responseText);
         } else {
             // handle error
-            console.log(xhr.readyState, xhr.status, xhr.responseText);
+            console.log('request error', xhr.readyState, xhr.status, xhr.responseText);
         }
+        console.timeEnd('upload');
     };
+    xhr.addEventListener('abort', function(e) { console.timeEnd('abort'); });
+    xhr.addEventListener('error', function(e) { console.timeEnd('error'); });
+    xhr.addEventListener('load', function(e) {  console.timeEnd('load'); });
     xhr.addEventListener('progress', function(e) {
         var done = e.position || e.loaded, total = e.totalSize || e.total;
         console.log('xhr progress: ' + (Math.floor(done/total*1000)/10) + '%');
     }, false);
 
-    formData.append("upload_file", file);
-    xhr.send(formData);
+    xhr.send(file);
 }
 
 var uploadfiles = document.querySelector('#uploads');
 uploadfiles.addEventListener('change', function () {
-    var files = this.files;
-    console.log("files to upload:", files);
-    for (var i = 0, len = files.length; i < len; i++) {
-        uploadFile(this.files[i]); // call the function to upload the file
-    }
+    var file = this.files[0];
+    console.log("file to upload:", file);
+    uploadFile(file); // call the function to upload the file
 }, false);
