@@ -1,9 +1,24 @@
 <html>
+<head>
+    <title>Upload Test Firefox 56</title>
+</head>
 <body>
-<form action="/">
+<p>Please click this link to reload this page several times: <a
+    href="javascript:window.location.reload();">reload page</a></p>
+
+<fieldset>
     <input type="file" accept="image/jpeg" id="uploads">
-    <input type="submit" value="upload">
-</form>
+
+    <button id="upload">upload full blob</button>
+    <button id="upload_c">upload chunked blob</button>
+    <button id="upload_ba">upload bytearray conversion blob</button>
+    <button id="upload_bac">upload prechunked bytearray blob</button>
+</fieldset>
+
+<fieldset>
+    <legend>Logs</legend>
+    <textarea id="logs" style="width:100%;" rows="100"></textarea>
+</fieldset>
 </body>
 <script src="js/upload.js"></script>
 </html>
